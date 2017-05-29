@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Actors\OrderActor.cs" />
     <Compile Include="Actors\SubscriberClient.cs" />
+    <Compile Include="Models\EventModel.cs" />
     <Compile Include="Root\ElementRoot.cs" />
     <Compile Include="Root\IElementRoot.cs" />
     <Compile Include="IoC\IrongateElementModule.cs" />
@@ -79,9 +80,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

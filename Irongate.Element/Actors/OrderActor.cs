@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -9,25 +10,45 @@ using System.Threading.Tasks;
 
 namespace Irongate.Element.Actors
 {
-    public class OrderActor : UntypedActor
+    public class OrderActor : ReceiveActor
     {
         int count = 0;
 
-        public OrderActor()
+        private IConnection _connection;
+        private IModel _model;
+
+        public OrderActor(IConnection connection)
         {
+            _connection = connection;
+            Receive<EventModel>(model => Handle_Message(model));
+            Connect();
         }
 
-        protected override void OnReceive(object message)
+        private void Handle_Message(EventModel model)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            var message = Encoding.UTF8.GetString(model.Body);
 
-            var bob = message;
-            if (!string.IsNullOrEmpty(bob.ToString()))
-            {
-                count++;
-                Console.WriteLine($"{DateTime.Now}.{bob.ToString()}.{count}");
-                Sender.Tell(true, Self);
-            }
+            count++;
+            Console.WriteLine($"{DateTime.Now}.{message.ToString()}.{count}");
+
+            _model.BasicAck(model.DeliveryTag, false);
         }
+
+        private void Connect()
+        {
+            _model = _connection.CreateModel();
+        }
+
+        //protected override void OnReceive(object message)
+        //{
+        //    Console.ForegroundColor = ConsoleColor.Green;
+        //    var bob = message;
+        //    if (!string.IsNullOrEmpty(bob.ToString()))
+        //    {
+        //        count++;
+        //        Console.WriteLine($"{DateTime.Now}.{bob.ToString()}.{count}");
+        //        Sender.Tell(true, Self);
+        //    }
+        //}
     }
 }

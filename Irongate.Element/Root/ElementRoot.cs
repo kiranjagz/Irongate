@@ -15,7 +15,8 @@ namespace Irongate.Element.Root
         private ActorSystem _actorSystem;
         private IActorRef _orderActor;
 
-        private ConnectionFactory _connectionFactory;
+        private IConnectionFactory _connectionFactory;
+        private IConnection _connection;
 
         public ElementRoot()
         {
@@ -27,14 +28,16 @@ namespace Irongate.Element.Root
 
         public bool Start()
         {
+            _connection = _connectionFactory.CreateConnection();
+
             var isCreated = CreateQueueAndExchange();
             if (!isCreated)
                 throw new Exception("Rabbit failure");
 
             _actorSystem = ActorSystem.Create("IrongateSystem");
+            _orderActor = _actorSystem.ActorOf(Props.Create(() => new OrderActor(_connection)));
+            SubscriberClient client = new SubscriberClient(_connection, _orderActor);
 
-            _orderActor = _actorSystem.ActorOf(Props.Create(() => new OrderActor()));
-            SubscriberClient client = new SubscriberClient(_connectionFactory, _orderActor);
             return true;
         }
 

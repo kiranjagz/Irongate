@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -11,43 +12,49 @@ namespace Irongate.Element.Actors
 {
     public class SubscriberClient
     {
-        private ConnectionFactory _connectionFactory;
         private IActorRef _orderActor;
-        private IModel channelForEventing;
 
-        public SubscriberClient(ConnectionFactory connectionFactory, IActorRef orderActor)
+        private IConnection _connection;
+        private IModel _model;
+
+        public SubscriberClient(IConnection connection, IActorRef orderActor)
         {
-            _connectionFactory = connectionFactory;
+            _connection = connection;
             _orderActor = orderActor;
             Connect();
         }
 
         private void Connect()
         {
-            IConnection connection = _connectionFactory.CreateConnection();
-            channelForEventing = connection.CreateModel();
-            channelForEventing.BasicQos(0, 1, false);
-            EventingBasicConsumer eventBasicConsumer = new EventingBasicConsumer(channelForEventing);
+            _model = _connection.CreateModel();
+            _model.BasicQos(0, 1, false);
+
+            EventingBasicConsumer eventBasicConsumer = new EventingBasicConsumer(_model);
             eventBasicConsumer.Received += EventBasicConsumer_Received;
-            channelForEventing.BasicConsume("Irongate-inbound", false, eventBasicConsumer);
+            _model.BasicConsume("Irongate-inbound", false, eventBasicConsumer);
         }
 
-        private async void EventBasicConsumer_Received(object sender, BasicDeliverEventArgs e)
+        private void EventBasicConsumer_Received(object sender, BasicDeliverEventArgs e)
         {
             IBasicProperties basicProperties = e.BasicProperties;
-            var exchange = e.Exchange;
-            var contentType = basicProperties.ContentType;
-            var consumerTage = e.ConsumerTag;
-            var deliveryTage = e.DeliveryTag;
-            var message = Encoding.UTF8.GetString(e.Body);
+
+            var eventModel = new EventModel()
+            {
+                Body = e.Body,
+                ConsumerTag = e.ConsumerTag,
+                DeliveryTag = e.DeliveryTag,
+                Exchange = e.Exchange,
+                RoutingKey = e.RoutingKey,
+                Redelivered = e.Redelivered,
+                ContentType = e.BasicProperties.ContentType
+            };
 
             //process stuff here
-            var processOrder = await _orderActor.Ask<object>(message);
+            //var processOrder = await _orderActor.Ask<object>(message);
+            _orderActor.Tell(eventModel);
             //
-            if (Convert.ToBoolean(processOrder))
-                channelForEventing.BasicAck(e.DeliveryTag, false);
-            else
-                channelForEventing.BasicNack(e.DeliveryTag, false, true);
+            //if (Convert.ToBoolean(processOrder))
+            //    _model.BasicAck(e.DeliveryTag, false);
         }
 
     }
