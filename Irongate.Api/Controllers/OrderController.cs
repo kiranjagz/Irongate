@@ -22,8 +22,10 @@ namespace Irongate.Api.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public IHttpActionResult Post([FromBody]string value)
         {
+            var headers = Request.Headers;
+            return Ok(value);
         }
 
         // PUT api/values/5
