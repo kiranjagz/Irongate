@@ -11,12 +11,19 @@ namespace Irongate.Element
 {
     class Program
     {
+        private static IContainer Container { get; set; }
+
         static void Main(string[] args)
         {
-            IElementRoot root = new ElementRoot();
-            root.Start();
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<IrongateElementModule>();
+            Container = builder.Build();
 
-            Console.WriteLine("Some rabbit processing is happening...I think..:|");
+            using (var scope = Container.BeginLifetimeScope())
+            {
+                var root = scope.Resolve<IElementRoot>();
+                root.Start();
+            }
             Console.Read();
         }
     }

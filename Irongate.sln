@@ -7,13 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Topshelf", "1. Topshelf"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Topshelf", "Irongate.Topshelf\Irongate.Topshelf.csproj", "{4295C5FA-954C-47F8-851F-B1D53C771DF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Selfhost.Api", "2. Selfhost.Api", "{12129181-CBCF-42EB-BDD4-72E9E52F0982}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Api", "Irongate.Api\Irongate.Api.csproj", "{7CAE59F1-3614-44C6-8209-DEAD08C2F51E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Rabbit.Element", "3. Rabbit.Element", "{498D9C01-8661-46D9-9650-A9D50E238B42}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Element", "Irongate.Element\Irongate.Element.csproj", "{6BF0523F-A65E-43BA-9A51-5F504A5FB023}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Producer", "Irongate.Producer\Irongate.Producer.csproj", "{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,13 +31,15 @@ Global
 		{6BF0523F-A65E-43BA-9A51-5F504A5FB023}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BF0523F-A65E-43BA-9A51-5F504A5FB023}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BF0523F-A65E-43BA-9A51-5F504A5FB023}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4295C5FA-954C-47F8-851F-B1D53C771DF7} = {DCD83498-0871-42D2-AECC-53B374F3A801}
-		{7CAE59F1-3614-44C6-8209-DEAD08C2F51E} = {12129181-CBCF-42EB-BDD4-72E9E52F0982}
-		{6BF0523F-A65E-43BA-9A51-5F504A5FB023} = {498D9C01-8661-46D9-9650-A9D50E238B42}
 	EndGlobalSection
 EndGlobal

@@ -7,67 +7,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Irongate.Element.Subscriber;
+using Irongate.Element.Subscriber.Settings;
 
 namespace Irongate.Element.Root
 {
     public class ElementRoot : IElementRoot
     {
         private ActorSystem _actorSystem;
-        private IActorRef _orderActor;
+        private IConnectionBoss _connectionBoss;
+        private ISetting _setting;
 
-        private IConnectionFactory _connectionFactory;
-        private IConnection _connection;
-
-        public ElementRoot()
+        public ElementRoot(IConnectionBoss connectionBoss, ISetting setting)
         {
-            _connectionFactory = new ConnectionFactory()
-            {
-                HostName = "localhost"
-            };
+            _connectionBoss = connectionBoss;
+            _setting = setting;
         }
 
         public bool Start()
         {
-            _connection = _connectionFactory.CreateConnection();
-
-            var isCreated = CreateQueueAndExchange();
-            if (!isCreated)
-                throw new Exception("Rabbit failure");
-
             _actorSystem = ActorSystem.Create("IrongateSystem");
-            _orderActor = _actorSystem.ActorOf(Props.Create(() => new OrderActor(_connection)));
-            SubscriberClient client = new SubscriberClient(_connection, _orderActor);
+            //_orderActor = _actorSystem.ActorOf(Props.Create(() => new GeneralActor(_connection)));
 
+            SubscriberClient client = new SubscriberClient(_connectionBoss.Connect(), _setting);
             return true;
         }
 
         public bool Stop()
         {
             throw new NotImplementedException();
-        }
-
-        public bool CreateQueueAndExchange()
-        {
-            bool isCreated;
-            var exchangeName = "Irongate-inbound";
-            var queueName = "Irongate-inbound";
-            var rountingKey = "#.createorder";
-
-            using (var connection = _connectionFactory.CreateConnection())
-            {
-                using (var channel = connection.CreateModel())
-                {
-                    channel.ExchangeDeclare(exchangeName, ExchangeType.Topic, true);
-
-                    channel.QueueDeclare(queueName, true, false, false, null);
-
-                    channel.QueueBind(queueName, exchangeName, rountingKey);
-
-                    isCreated = true;
-                }
-            }
-
-            return isCreated;
         }
     }
 }

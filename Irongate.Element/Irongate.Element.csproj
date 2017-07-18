@@ -33,8 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Akka, Version=1.2.0.33, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Akka.1.2.0\lib\net45\Akka.dll</HintPath>
+    <Reference Include="Akka, Version=1.2.3.41, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Akka.1.2.3\lib\net45\Akka.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Autofac, Version=4.6.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -67,9 +67,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\OrderActor.cs" />
-    <Compile Include="Actors\SubscriberClient.cs" />
-    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Actors\TheGeneral\GeneralActor.cs" />
+    <Compile Include="Actors\TheTrooper\TrooperActor.cs" />
+    <Compile Include="Subscriber\Connection\ConnectionBoss.cs" />
+    <Compile Include="Subscriber\Connection\ConnectionBossJeff.cs" />
+    <Compile Include="Subscriber\ExtensionMethods.cs" />
+    <Compile Include="Subscriber\Connection\IConnectionBoss.cs" />
+    <Compile Include="Subscriber\Settings\ISetting.cs" />
+    <Compile Include="Subscriber\Settings\Setting.cs" />
+    <Compile Include="Subscriber\SubscriberClient.cs" />
+    <Compile Include="Subscriber\EventModel.cs" />
     <Compile Include="Root\ElementRoot.cs" />
     <Compile Include="Root\IElementRoot.cs" />
     <Compile Include="IoC\IrongateElementModule.cs" />

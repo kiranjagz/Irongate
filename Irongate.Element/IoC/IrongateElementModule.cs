@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Irongate.Element.Root;
+using Irongate.Element.Subscriber;
+using Irongate.Element.Subscriber.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace Irongate.Element.IoC
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ElementRoot>().As<IElementRoot>();
+            builder.RegisterType<ConnectionBoss>().As<IConnectionBoss>();
+            builder.RegisterType<Setting>().As<ISetting>();
             base.Load(builder);
         }
     }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Irongate.Element.Models
+namespace Irongate.Element.Subsriber
 {
     public class EventModel
     {
-        public byte[] Body { get; set; }
+        public string Body { get; set; }
         public string ConsumerTag { get; set; }
         public ulong DeliveryTag { get; set; }
         public string Exchange { get; set; }
