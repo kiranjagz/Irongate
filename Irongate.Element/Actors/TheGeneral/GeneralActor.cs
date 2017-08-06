@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Mongo;
 using Irongate.Element.Subsriber;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,16 +11,23 @@ using System.Threading.Tasks;
 
 namespace Irongate.Element.Actors.TheGeneral
 {
+    //Does high level jobs, secret jobs done by trooper
     public class GeneralActor : ReceiveActor
     {
-        public GeneralActor()
+        private IMongoRepository _mongoRepository;
+
+        public GeneralActor(IMongoRepository monogRepository)
         {
+            _mongoRepository = monogRepository;
             Receive<EventModel>(model => Handle_Message(model));
         }
 
         private void Handle_Message(EventModel model)
         {
-            //var message = Encoding.UTF8.GetString(model.Body);
+            var message = model.Body;
+            _mongoRepository.SaveSomething(model);
+
+            Console.WriteLine($"Message was. {model.Body}");
         }
     }
 }

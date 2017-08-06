@@ -13,14 +13,17 @@ namespace Irongate.Element.Subscriber
 {
     public class SubscriberClient
     {
+        private IActorRef _generalActor;
+
         private ISetting _setting;
 
         private IConnection _connection;
         private IModel _model;
         EventingBasicConsumer _eventBasicConsumer;
 
-        public SubscriberClient(IConnection connection, ISetting setting)
+        public SubscriberClient(IConnection connection, ISetting setting, IActorRef generalActor)
         {
+            _generalActor = generalActor;
             _setting = setting;
             _connection = connection;
             _model = _connection.CreateModel();
@@ -34,7 +37,8 @@ namespace Irongate.Element.Subscriber
         {
             var eventModel = e.Map();
 
-            Console.WriteLine($"Message was. {eventModel.Body}");
+            _generalActor.Tell(eventModel);
+
             _model.BasicAck(e.DeliveryTag, false);
         }
     }

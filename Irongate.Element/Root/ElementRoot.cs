@@ -9,27 +9,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Irongate.Element.Subscriber;
 using Irongate.Element.Subscriber.Settings;
+using Irongate.Element.Actors.TheGeneral;
+using Irongate.Element.Mongo;
 
 namespace Irongate.Element.Root
 {
     public class ElementRoot : IElementRoot
     {
         private ActorSystem _actorSystem;
+        private IActorRef _generalActor;
         private IConnectionBoss _connectionBoss;
+        private IMongoRepository _mongoRepository;
         private ISetting _setting;
 
-        public ElementRoot(IConnectionBoss connectionBoss, ISetting setting)
+        public ElementRoot(IConnectionBoss connectionBoss, ISetting setting, IMongoRepository mongoRepository)
         {
             _connectionBoss = connectionBoss;
             _setting = setting;
+            _mongoRepository = mongoRepository;
         }
 
         public bool Start()
         {
             _actorSystem = ActorSystem.Create("IrongateSystem");
-            //_orderActor = _actorSystem.ActorOf(Props.Create(() => new GeneralActor(_connection)));
+            _generalActor = _actorSystem.ActorOf(Props.Create(() => new GeneralActor(_mongoRepository)));
+            Props.Create<GeneralActor>().WithMailbox("MailBox");
 
-            SubscriberClient client = new SubscriberClient(_connectionBoss.Connect(), _setting);
+            SubscriberClient client = new SubscriberClient(_connectionBoss.Connect(), _setting, _generalActor);
             return true;
         }
 

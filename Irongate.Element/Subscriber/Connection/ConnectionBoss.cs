@@ -15,11 +15,6 @@ namespace Irongate.Element.Subscriber
         private IConnection _connection;
         private IModel _model;
 
-        //private const string _hostName = "localhost";
-        //private const string _exchangeName = "irongate-inbound";
-        //private const string _queueName = "irongate-inbound-queue";
-        //private const string _routingKey = "irongate.firemessage";
-
         public ConnectionBoss(ISetting setting)
         {
             _setting = setting;
