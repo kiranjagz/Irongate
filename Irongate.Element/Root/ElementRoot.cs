@@ -11,6 +11,7 @@ using Irongate.Element.Subscriber;
 using Irongate.Element.Subscriber.Settings;
 using Irongate.Element.Actors.TheGeneral;
 using Irongate.Element.Mongo;
+using Irongate.Element.Actors.TheTrooper;
 
 namespace Irongate.Element.Root
 {
@@ -18,6 +19,7 @@ namespace Irongate.Element.Root
     {
         private ActorSystem _actorSystem;
         private IActorRef _generalActor;
+        private IActorRef _trooperActor;
         private IConnectionBoss _connectionBoss;
         private IMongoRepository _mongoRepository;
         private ISetting _setting;
@@ -32,8 +34,9 @@ namespace Irongate.Element.Root
         public bool Start()
         {
             _actorSystem = ActorSystem.Create("IrongateSystem");
-            _generalActor = _actorSystem.ActorOf(Props.Create(() => new GeneralActor(_mongoRepository)));
-            Props.Create<GeneralActor>().WithMailbox("MailBox");
+            _trooperActor = _actorSystem.ActorOf(Props.Create(() => new TrooperActor(_mongoRepository)));
+            _generalActor = _actorSystem.ActorOf(Props.Create(() => new GeneralActor(_mongoRepository, _trooperActor)));
+
 
             SubscriberClient client = new SubscriberClient(_connectionBoss.Connect(), _setting, _generalActor);
             return true;

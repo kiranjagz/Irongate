@@ -8,6 +8,6 @@ namespace Irongate.Element.Mongo
 {
     public interface IMongoRepository
     {
-        bool SaveSomething(object fireStuff);
+        bool SaveSomething(object fireStuff, string collection);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Mongo;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,34 @@ namespace Irongate.Element.Actors.TheTrooper
 {
     public class TrooperActor : ReceiveActor
     {
-        public TrooperActor()
-        {
+        private IMongoRepository _mongoRepository;
+        private const string CollectionName = "trooperpooper";
 
+        public TrooperActor(IMongoRepository monogRepository)
+        {
+            _mongoRepository = monogRepository;
+            Receive<TrooperMessageModel>(model => Handle_Message(model));
+        }
+
+        private void Handle_Message(TrooperMessageModel model)
+        {
+            var heavyCalculator = HeavyLifting(model.FireModel.FireCode);
+
+            var trooperMessage = new { TrooperId = new Random(34).Next(), Calculation = heavyCalculator, Message = model.FireModel.Message, DeliveryTag = model.DeliveryTag };
+
+            _mongoRepository.SaveSomething(trooperMessage, CollectionName);
+
+            model.RabbitModel.BasicAck(model.DeliveryTag, false);
+
+            Console.WriteLine($"Message was. {JsonConvert.SerializeObject(trooperMessage)}");
+        }
+
+        private decimal HeavyLifting(int fireCode)
+        {
+            var divideFirst = fireCode / 3;
+            var multiple = divideFirst * 7;
+            var heavyMath = multiple % 2 == 0 ? multiple + 29 : divideFirst - divideFirst + 1;
+            return heavyMath;
         }
     }
 }

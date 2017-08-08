@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Actors.TheGeneral;
 using Irongate.Element.Subscriber.Settings;
 using Irongate.Element.Subsriber;
 using RabbitMQ.Client;
@@ -14,9 +15,7 @@ namespace Irongate.Element.Subscriber
     public class SubscriberClient
     {
         private IActorRef _generalActor;
-
         private ISetting _setting;
-
         private IConnection _connection;
         private IModel _model;
         EventingBasicConsumer _eventBasicConsumer;
@@ -36,10 +35,8 @@ namespace Irongate.Element.Subscriber
         private void EventBasicConsumer_Received(object sender, BasicDeliverEventArgs e)
         {
             var eventModel = e.Map();
-
-            _generalActor.Tell(eventModel);
-
-            _model.BasicAck(e.DeliveryTag, false);
+            _generalActor.Tell(new GeneralMessageModel(eventModel, _model));
+            //_model.BasicAck(e.DeliveryTag, false);
         }
     }
 }

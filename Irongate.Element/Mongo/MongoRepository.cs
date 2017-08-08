@@ -20,10 +20,10 @@ namespace Irongate.Element.Mongo
             _mongoDatabase = _mongoClient.GetDatabase(_mongoSettings.Database);
         }
 
-        public bool SaveSomething(object fireStuff)
+        public bool SaveSomething(object fireStuff, string collection)
         {
-            var collection = _mongoDatabase.GetCollection<object>(_mongoSettings.CollectionName);
-            collection.InsertOne(fireStuff);
+            var col = _mongoDatabase.GetCollection<object>(collection);
+            col.InsertOne(fireStuff);
             return true;
         }
     }

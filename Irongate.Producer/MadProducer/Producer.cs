@@ -32,7 +32,7 @@ namespace Irongate.Producer.MadProducer
                     for (int i = 1; i <= 100; i++)
                     {
                         var random = new Random().Next();
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(200);
                         var fireModel = new FireModel { FireCode = random, Message = $"Message from iron bob. {i}" };
                         Console.WriteLine(fireModel.FireCode.ToString());
                         var message = Newtonsoft.Json.JsonConvert.SerializeObject(fireModel);

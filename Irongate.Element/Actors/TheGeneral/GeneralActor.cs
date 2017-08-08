@@ -1,6 +1,8 @@
 ﻿using Akka.Actor;
+using Irongate.Element.Actors.TheTrooper;
 using Irongate.Element.Mongo;
 using Irongate.Element.Subsriber;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -15,19 +17,34 @@ namespace Irongate.Element.Actors.TheGeneral
     public class GeneralActor : ReceiveActor
     {
         private IMongoRepository _mongoRepository;
+        private IActorRef _trooperActor;
+        private const string CollectionName = "generalmessages";
 
-        public GeneralActor(IMongoRepository monogRepository)
+        public GeneralActor(IMongoRepository monogRepository, IActorRef trooperActor)
         {
+            _trooperActor = trooperActor;
             _mongoRepository = monogRepository;
-            Receive<EventModel>(model => Handle_Message(model));
+            Receive<GeneralMessageModel>(model => Handle_Message(model));
         }
 
-        private void Handle_Message(EventModel model)
+        private void Handle_Message(GeneralMessageModel model)
         {
-            var message = model.Body;
-            _mongoRepository.SaveSomething(model);
+            var message = model.EventModel.Body;
+            var fireModel = JsonConvert.DeserializeObject<FireModel>(model.EventModel.Body);
+            var useTrooper = IsHiddenMessage(fireModel.FireCode);
 
-            Console.WriteLine($"Message was. {model.Body}");
+            if (useTrooper)
+            {
+                _trooperActor.Tell(new TrooperMessageModel(fireModel, model.RabbitModel, model.EventModel.DeliveryTag));
+            }
+            else
+            {
+                _mongoRepository.SaveSomething(model, CollectionName);
+                model.RabbitModel.BasicAck(model.EventModel.DeliveryTag, false);
+                Console.WriteLine($"Message was. {model.EventModel.Body}");
+            }
         }
+
+        private bool IsHiddenMessage(int fireCode) => fireCode % 2 == 0;
     }
 }
