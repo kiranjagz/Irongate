@@ -23,8 +23,8 @@ namespace Irongate.Element.Actors.TheTrooper
         private void Handle_Message(TrooperMessageModel model)
         {
             var heavyCalculator = HeavyLifting(model.FireModel.FireCode);
-
-            var trooperMessage = new { TrooperId = new Random(34).Next(), Calculation = heavyCalculator, Message = model.FireModel.Message, DeliveryTag = model.DeliveryTag };
+            var randomId = new Random().Next();
+            var trooperMessage = new { TrooperId = randomId, Calculation = heavyCalculator, Message = model.FireModel.Message, DeliveryTag = model.DeliveryTag };
 
             _mongoRepository.SaveSomething(trooperMessage, CollectionName);
 

@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Element", "Irongat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Producer", "Irongate.Producer\Irongate.Producer.csproj", "{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. IronTask", "2. IronTask", "{D33FC51C-D4F7-4DB1-91A4-064D70FAF473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello.Bob", "Hello.Bob\Hello.Bob.csproj", "{7271E701-6F4B-4551-A39B-424A302235AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,11 +39,16 @@ Global
 		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7271E701-6F4B-4551-A39B-424A302235AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7271E701-6F4B-4551-A39B-424A302235AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7271E701-6F4B-4551-A39B-424A302235AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7271E701-6F4B-4551-A39B-424A302235AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4295C5FA-954C-47F8-851F-B1D53C771DF7} = {DCD83498-0871-42D2-AECC-53B374F3A801}
+		{7271E701-6F4B-4551-A39B-424A302235AD} = {D33FC51C-D4F7-4DB1-91A4-064D70FAF473}
 	EndGlobalSection
 EndGlobal
