@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Irongate.Producer.MadProducer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,18 +8,25 @@ using System.Web.Http;
 
 namespace Irongate.Api.Controllers
 {
-    public class OrderController : ApiController
+    public class RabbitController : ApiController
     {
-         // GET api/values
+        private readonly IProducer _producer;
+
+        public RabbitController(IProducer producer)
+        {
+            _producer = producer;
+        }
+        // GET api/values
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            var fireMessages = _producer.FireMessages();
+            return Ok();
         }
 
         // POST api/values

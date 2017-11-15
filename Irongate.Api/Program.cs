@@ -1,4 +1,6 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using Autofac;
+using Irongate.Api.IoC;
+using Microsoft.Owin.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,14 @@ namespace Irongate.Api
 {
     class Program
     {
+        private static IContainer Container { get; set; }
+
         static void Main(string[] args)
         {
-            string baseUri = "http://localhost:8080";
+            var builder = new ContainerBuilder();
+            builder.RegisterModule<IoCModule>();
+            Container = builder.Build();
+            string baseUri = "http://localhost:8082";
 
             Console.WriteLine("Starting web Server...");
             WebApp.Start<Startup>(baseUri);
