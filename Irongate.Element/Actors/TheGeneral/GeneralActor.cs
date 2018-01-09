@@ -15,39 +15,59 @@ using System.Threading.Tasks;
 namespace Irongate.Element.Actors.TheGeneral
 {
     //Does high level jobs, secret jobs done by trooper
-    public class GeneralActor : ReceiveActor
+    public class GeneralActor : ReceiveActor, IWithUnboundedStash
     {
         private IMongoRepository _mongoRepository;
         private IActorRef _trooperActor;
         private const string _collectionName = "generalmessages";
         private const string _trooperActorName = "trooperActor";
 
+        // added along with the IWithUnboundedStash interface
+        public IStash Stash { get; set; }
+
         public GeneralActor(IMongoRepository monogRepository)
         {
             _mongoRepository = monogRepository;
             var trooperProp = Props.Create<TrooperActor>(monogRepository).WithRouter(new RoundRobinPool(5));
             _trooperActor = Context.ActorOf(trooperProp, _trooperActorName);
+            Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(20), Self, new GeneralTimerTrigger.Start(DateTime.Now), ActorRefs.Nobody);
             Receive<GeneralMessageModel>(model => Handle_Message(model));
+            Receive<GeneralTimerTrigger.Start>(_ => Handle_Trigger(_));
+        }
+
+        private void Handle_Trigger(GeneralTimerTrigger.Start _)
+        {
+            Stash.UnstashAll();
+            Console.WriteLine($"Timer schedule did run");
+            //BecomeStacked(() =>
+            //{
+            //    Receive<GeneralMessageModel>(model =>
+            //    {
+            //        var fireModel = JsonConvert.DeserializeObject<FireModel>(model.EventModel.Body);
+            //        Console.WriteLine($"Becoming unstacked: {fireModel.FireCode}");
+            //    });
+            //});
+            //Context.UnbecomeStacked();
         }
 
         private void Handle_Message(GeneralMessageModel model)
         {
             var message = model.EventModel.Body;
             var fireModel = JsonConvert.DeserializeObject<FireModel>(model.EventModel.Body);
-            var useTrooper = IsHiddenMessage(fireModel.FireCode);
-
-            if (useTrooper)
-                _trooperActor.Tell(new TrooperMessageModel(fireModel, model.RabbitModel, model.EventModel.DeliveryTag));
-            else
-            {
-                _mongoRepository.SaveSomething(model, _collectionName);
-                model.RabbitModel.BasicAck(model.EventModel.DeliveryTag, false);
-                Console.WriteLine($"Message was. {model.EventModel.Body}");
-            }
+            Stash.Stash();
+            _trooperActor.Tell(new TrooperMessageModel(fireModel, model.RabbitModel, model.EventModel.DeliveryTag));
+            //else
+            //{
+            //    _mongoRepository.SaveSomething(model, _collectionName);
+            //    model.RabbitModel.BasicAck(model.EventModel.DeliveryTag, false);
+            //    Console.WriteLine($"Message was. {model.EventModel.Body}");
+            //}
         }
 
+        // Move to interface
         private bool IsHiddenMessage(int fireCode) => fireCode % 2 == 0;
 
+        //Implement somewhere
         protected override SupervisorStrategy SupervisorStrategy()
         {
             return new OneForOneStrategy(// or AllForOneStrategy

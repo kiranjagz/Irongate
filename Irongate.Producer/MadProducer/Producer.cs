@@ -29,12 +29,17 @@ namespace Irongate.Producer.MadProducer
             {
                 using (var channel = _connection.CreateModel())
                 {
-                    for (int i = 1; i <= 100; i++)
+                    for (int i = 1; i <= 200; i++)
                     {
                         
                         var random = new Random().Next();
-                        System.Threading.Thread.Sleep(200);
-                        var fireModel = new FireModel { FireCode = random, Message = $"Message from iron bob. {i}" };
+                        string fireBrand = "Fire-Jefff";
+                        System.Threading.Thread.Sleep(20);
+
+                        if (i % 2 == 0)
+                            fireBrand = "Ice-Bobb";
+
+                        var fireModel = new FireModel { FireBrand = fireBrand, FireCode = random, Message = $"Message from iron producer. {i}" };
                         Console.WriteLine(fireModel.FireCode.ToString());
                         var message = Newtonsoft.Json.JsonConvert.SerializeObject(fireModel);
                         var body = Encoding.UTF8.GetBytes(message);
@@ -73,8 +78,9 @@ namespace Irongate.Producer.MadProducer
 
         private class FireModel
         {
-            public int FireCode { get; set; }
-            public string Message { get; set; }
+            public string FireBrand { get; internal set; }
+            public int FireCode { get; internal set; }
+            public string Message { get; internal set; }
         }
     }
 }

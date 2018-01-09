@@ -12,6 +12,11 @@ namespace Irongate.Api.Controllers
     {
         private readonly IProducer _producer;
 
+        public RabbitController()
+        {
+
+        }
+
         public RabbitController(IProducer producer)
         {
             _producer = producer;
@@ -25,8 +30,8 @@ namespace Irongate.Api.Controllers
         // GET api/values/5
         public IHttpActionResult Get(int id)
         {
-            var fireMessages = _producer.FireMessages();
-            return Ok();
+            var jeff = _producer.FireMessages();
+            return Ok(id);
         }
 
         // POST api/values
