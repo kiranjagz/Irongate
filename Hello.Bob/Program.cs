@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hello.Bob.Async;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,52 +13,27 @@ namespace Hello.Bob
     {
         static void Main()
         {
-            Task webThingy = new Task(HandleBob);
-            Task fileThingy = new Task(async () => await ReadFromFile("c:\\test.txt"));
-            webThingy.Start();
-            fileThingy.Start();
+            DoJoo();
             Console.Read();
         }
 
-        static async void HandleBob()
+        private static async void DoJoo()
         {
-            string url = "http://en.wikipedia.org/";
-            using (HttpClient client = new HttpClient())
-            {
-                var response = await client.GetAsync(url, HttpCompletionOption.ResponseContentRead);
-                var content = await response.Content.ReadAsStringAsync();
+            int count = 0;
+            Joo joo = new Joo();
 
-                if (!string.IsNullOrWhiteSpace(content))
+            while (true)
+            {
+                count++;
+                try
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(content.Substring(0, 100));
+                    Console.ForegroundColor = ConsoleColor.White;
+                    await joo.HandleBob(count);
                 }
-            }
-        }
-
-        static async Task ReadFromFile(string filePath)
-        {
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string line;
-                //var readAllFile = await reader.ReadToEndAsync();
-                //Console.WriteLine(readAllFile);
-
-                while ((line = await reader.ReadLineAsync()) != null)
+                catch (Exception ex)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    await Task.Delay(2000);
-                    Console.WriteLine(line);
-                    await WriteToFile(line);
+                    Console.WriteLine($"An error has occurred, contact someone who cares: {ex.Message}");
                 }
-            }
-        }
-
-        static async Task WriteToFile(string line)
-        {
-            using (StreamWriter writer = new StreamWriter("c:\\newtest.txt", true))
-            {
-                await writer.WriteLineAsync($"{line} new jeff");
             }
         }
     }
