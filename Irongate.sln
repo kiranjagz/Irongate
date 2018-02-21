@@ -3,17 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Topshelf", "1. Topshelf", "{DCD83498-0871-42D2-AECC-53B374F3A801}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Topshelf", "Irongate.Topshelf\Irongate.Topshelf.csproj", "{4295C5FA-954C-47F8-851F-B1D53C771DF7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Api", "Irongate.Api\Irongate.Api.csproj", "{7CAE59F1-3614-44C6-8209-DEAD08C2F51E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Element", "Irongate.Element\Irongate.Element.csproj", "{6BF0523F-A65E-43BA-9A51-5F504A5FB023}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irongate.Producer", "Irongate.Producer\Irongate.Producer.csproj", "{2D442BF3-8B71-4325-AB5F-9DED2F25C58B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. IronTask", "2. IronTask", "{D33FC51C-D4F7-4DB1-91A4-064D70FAF473}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hello.Bob", "Hello.Bob\Hello.Bob.csproj", "{7271E701-6F4B-4551-A39B-424A302235AD}"
 EndProject
@@ -23,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4295C5FA-954C-47F8-851F-B1D53C771DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4295C5FA-954C-47F8-851F-B1D53C771DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4295C5FA-954C-47F8-851F-B1D53C771DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4295C5FA-954C-47F8-851F-B1D53C771DF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CAE59F1-3614-44C6-8209-DEAD08C2F51E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CAE59F1-3614-44C6-8209-DEAD08C2F51E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CAE59F1-3614-44C6-8209-DEAD08C2F51E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,9 +36,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4295C5FA-954C-47F8-851F-B1D53C771DF7} = {DCD83498-0871-42D2-AECC-53B374F3A801}
-		{7271E701-6F4B-4551-A39B-424A302235AD} = {D33FC51C-D4F7-4DB1-91A4-064D70FAF473}
 	EndGlobalSection
 EndGlobal

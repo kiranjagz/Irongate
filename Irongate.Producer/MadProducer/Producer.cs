@@ -29,9 +29,9 @@ namespace Irongate.Producer.MadProducer
             {
                 using (var channel = _connection.CreateModel())
                 {
-                    for (int i = 1; i <= 200; i++)
+                    for (int i = 1; i <= 20; i++)
                     {
-                        
+
                         var random = new Random().Next();
                         string fireBrand = "Fire-Jefff";
                         System.Threading.Thread.Sleep(20);
@@ -39,7 +39,7 @@ namespace Irongate.Producer.MadProducer
                         if (i % 2 == 0)
                             fireBrand = "Ice-Bobb";
 
-                        var fireModel = new FireModel { FireBrand = fireBrand, FireCode = random, Message = $"Message from iron producer. {i}" };
+                        var fireModel = new FireModel { FireBrand = fireBrand, FireCode = random, Message = $"Message from iron producer. {i}", Amount = random, DateCreated = DateTime.Now };
                         Console.WriteLine(fireModel.FireCode.ToString());
                         var message = Newtonsoft.Json.JsonConvert.SerializeObject(fireModel);
                         var body = Encoding.UTF8.GetBytes(message);
@@ -52,7 +52,7 @@ namespace Irongate.Producer.MadProducer
                     }
                 }
             }
-            catch(Exception e) { Console.WriteLine(e.Message); }
+            catch (Exception e) { Console.WriteLine(e.Message); }
 
             return count;
         }
@@ -69,7 +69,7 @@ namespace Irongate.Producer.MadProducer
 
                 //var args = new Dictionary<string, object>();
                 //args.Add("x-message-ttl", 60000);
-                channel.QueueDeclare(queueName, true, false, false,null);
+                channel.QueueDeclare(queueName, true, false, false, null);
                 channel.QueueBind(queueName, exchangeName, rountingKey);
             }
 
@@ -81,6 +81,8 @@ namespace Irongate.Producer.MadProducer
             public string FireBrand { get; internal set; }
             public int FireCode { get; internal set; }
             public string Message { get; internal set; }
+            public double Amount { get; internal set; }
+            public DateTime DateCreated { get; internal set; }
         }
     }
 }

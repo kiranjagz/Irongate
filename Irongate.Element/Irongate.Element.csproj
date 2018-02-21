@@ -87,6 +87,7 @@
     <Compile Include="Actors\TheGeneral\GeneralActor.cs" />
     <Compile Include="Actors\TheGeneral\GeneralMessageModel.cs" />
     <Compile Include="Actors\TheGeneral\GeneralTimerTrigger.cs" />
+    <Compile Include="Actors\TheTrooper\SummaryDateMessageModel.cs" />
     <Compile Include="Actors\TheTrooper\TrooperActor.cs" />
     <Compile Include="Actors\TheTrooper\TrooperMessageModel.cs" />
     <Compile Include="Actors\TheTrooper\WriteFileMessageModel.cs" />

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="MadProducer\IProducer.cs" />
     <Compile Include="MadProducer\Producer.cs" />
+    <Compile Include="MadProducer\SummaryProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
