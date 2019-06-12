@@ -16,14 +16,22 @@ namespace Irongate.Producer
 
         static void Main(string[] args)
         {
-            _connectionFactory = new ConnectionFactory { HostName = "localhost" };
-            _connection = _connectionFactory.CreateConnection();
-            _fireProducer = new MadProducer.Producer(_connection);
+            try
+            {
+                _connectionFactory = new ConnectionFactory { HostName = "localhost" };
+                _connection = _connectionFactory.CreateConnection();
+                _fireProducer = new MadProducer.Producer(_connection);
 
-            var count = _fireProducer.FireMessages();
-            Console.WriteLine($"Number of messsages sent to the irongate. {count}");
+                var count = _fireProducer.FireMessages();
+                Console.WriteLine($"Number of messsages sent to the irongate. {count}");
 
-            Console.Read();
+                Console.Read();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+            }
         }
     }
 }

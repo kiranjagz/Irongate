@@ -19,22 +19,23 @@ namespace Irongate.Producer.MadProducer
         public Producer(IConnection connection)
         {
             _connection = connection;
-            CreateQueueAndExchange();
+            //CreateQueueAndExchange();
         }
 
         public int FireMessages()
         {
             var count = 0;
-            try
-            {
-                using (var channel = _connection.CreateModel())
-                {
-                    for (int i = 1; i <= 20; i++)
-                    {
+ 
+                var channel = _connection.CreateModel();
 
+                for (int i = 1; i <= 50; i++)
+                {
+
+                    try
+                    {
                         var random = new Random().Next();
                         string fireBrand = "Fire-Jefff";
-                        System.Threading.Thread.Sleep(20);
+                        System.Threading.Thread.Sleep(TimeSpan.FromSeconds(3));
 
                         if (i % 2 == 0)
                             fireBrand = "Ice-Bobb";
@@ -44,37 +45,67 @@ namespace Irongate.Producer.MadProducer
                         var message = Newtonsoft.Json.JsonConvert.SerializeObject(fireModel);
                         var body = Encoding.UTF8.GetBytes(message);
 
-                        channel.BasicPublish(exchange: _exchangeName,
+                    channel.BasicReturn += Channel_BasicReturn;
+                    channel.BasicAcks += Channel_BasicAcks;
+                    channel.BasicNacks += Channel_BasicNacks;
+
+
+                    channel.BasicPublish(exchange: _exchangeName,
                                              routingKey: _routingKey,
                                              basicProperties: null,
                                              body: body);
+
                         count++;
+                        channel.ConfirmSelect();
+                        channel.WaitForConfirms(TimeSpan.FromSeconds(3));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
                     }
                 }
-            }
-            catch (Exception e) { Console.WriteLine(e.Message); }
+
+    
 
             return count;
         }
 
-        private bool CreateQueueAndExchange()
+        private void Channel_BasicNacks(object sender, RabbitMQ.Client.Events.BasicNackEventArgs e)
         {
-            var exchangeName = _exchangeName;
-            var queueName = _queueName;
-            var rountingKey = _routingKey;
-
-            using (var channel = _connection.CreateModel())
-            {
-                channel.ExchangeDeclare(exchangeName, ExchangeType.Topic, true);
-
-                //var args = new Dictionary<string, object>();
-                //args.Add("x-message-ttl", 60000);
-                channel.QueueDeclare(queueName, true, false, false, null);
-                channel.QueueBind(queueName, exchangeName, rountingKey);
-            }
-
-            return true;
+            Console.WriteLine(e.DeliveryTag);
+       
         }
+
+        private void Channel_BasicAcks(object sender, RabbitMQ.Client.Events.BasicAckEventArgs e)
+        {
+        
+            Console.WriteLine(e.DeliveryTag);
+     
+        }
+
+        private void Channel_BasicReturn(object sender, RabbitMQ.Client.Events.BasicReturnEventArgs e)
+        {
+            var obj = e.ReplyText;
+        }
+
+        //private bool CreateQueueAndExchange()
+        //{
+        //    var exchangeName = _exchangeName;
+        //    var queueName = _queueName;
+        //    var rountingKey = _routingKey;
+
+        //    using (var channel = _connection.CreateModel())
+        //    {
+        //        channel.ExchangeDeclare(exchangeName, ExchangeType.Direct, true);
+
+        //        //var args = new Dictionary<string, object>();
+        //        //args.Add("x-message-ttl", 60000);
+        //        //channel.QueueDeclare(queueName, true, false, false, null);
+        //        //channel.QueueBind(queueName, exchangeName, rountingKey);
+        //    }
+
+        //    return true;
+        //}
 
         private class FireModel
         {
